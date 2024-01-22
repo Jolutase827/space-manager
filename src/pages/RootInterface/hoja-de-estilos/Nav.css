@@ -1,0 +1,29 @@
+nav{
+    background-color: #E26EE5;
+    height: 50px;
+}
+nav>button{
+    color: #49108B;
+    text-decoration: none;
+    font-family: 'Nova Square', sans-serif;
+    height: 100%;
+    width: 100%;
+    border: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition: 0.3s;
+    font-size: 17px;
+}
+nav>.active{
+    background-color: #49108B;
+    font-size: 20px;
+    color: white;
+}
+nav>button:hover{
+    transition: 0.3s;
+    color: white;
+    font-size: 20px;
+}
+nav>button:active{
+    transition: 0.2s;
+    background-color: #49108B;
+}

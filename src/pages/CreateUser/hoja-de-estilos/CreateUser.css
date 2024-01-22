@@ -1,0 +1,81 @@
+main.create-user{
+    min-height: 75vh;
+    background-image: linear-gradient(to bottom, #7E30E1 , #49108B);
+}
+main.create-user>form{
+    background-color: white;
+    min-height: 300px;
+}
+main.create-user>form>h2{
+    font-family: 'Nova Square', sans-serif;
+}
+main.create-user>form>h2>i{
+    cursor: pointer;
+    font-size: 25px;
+}
+input.create-user{
+    font-family: 'Oswald', sans-serif;
+    font-size: 17.5px;
+    padding: 5px;
+    padding-top: 7px;
+    border: solid 2px gray;
+}
+.rounded-left{
+    border-radius:  var(--bs-border-radius) 0 0  var(--bs-border-radius);
+}
+.rounded-right{
+    border-radius: 0  var(--bs-border-radius)  var(--bs-border-radius) 0 ;
+}
+.button-generate-random{
+    font-size: 17.5px;
+    padding: 5px;
+    padding-top: 7px;
+    font-family: 'Bebas Neue', sans-serif;
+    border: solid 2px gray;
+    color: rgb(77, 77, 77);
+}
+.button-generate-random:hover{
+    color: rgb(34, 34, 34);
+}
+.button-add-user{
+    background-color: #7E30E1;
+    font-family: 'Oswald', sans-serif;
+    color: white;
+    border:solid 2px #7E30E1 ;
+    transition: 0.3s;
+}
+.button-add-user:hover{
+    transition: 0.3s;
+    background-color: #49108B;
+    font-family: 'Oswald', sans-serif;
+    color: white;
+    border:solid 2px #49108B ;
+    box-shadow: #7E30E1 0px 3px 4px 2px;
+}
+.error-message{
+    background-color: rgb(255, 126, 126);
+    border: solid 2px rgb(255, 43, 43);
+    font-weight: 600;
+    animation-name: pop;
+    animation-duration: 0.75s;
+    animation-timing-function: ease;
+}
+.good-message{
+    background-color: rgb(132, 255, 101);
+    border: solid 2px rgb(46, 253, 19);
+    font-weight: 600;
+    animation-name: pop;
+    animation-duration: 0.75s;
+    animation-timing-function: ease;
+}
+@keyframes pop {
+    0%{
+        transform: scale(0);
+    }
+    90%{
+        transform: scale(110%);
+    }
+    100%{
+        transform: scale(100%);
+    }
+}

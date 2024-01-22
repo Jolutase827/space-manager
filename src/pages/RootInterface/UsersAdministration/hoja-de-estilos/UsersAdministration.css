@@ -1,0 +1,79 @@
+main.user-administration{
+    min-height: 80vh;
+}
+.title{
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    border-bottom: solid 2px black;
+}
+.rounded-left{
+    border-radius: 20px 0 0 20px;
+}
+.rounded-right{
+    border-radius: 0 20px 20px 0 ;
+}
+.searcher{
+    border: 2px solid #7E30E1;
+}
+.button-searcher{
+    transition: 0.3s;
+    border: 2px solid #7E30E1;
+    background-color: #7E30E1;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+.lupa{
+    position: absolute !important;
+    left: 2%;
+    color: gray;
+   
+}
+.button-searcher:hover{
+    transition: 0.3s;
+    background-color: #49108B;
+    color: white;
+}
+.boton-anyadir-users{
+    transition: 0.3s;
+    border: solid 1px #7E30E1;
+    background-color: #7E30E1;
+    color: white;
+    height: 70%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.boton-anyadir-users:hover{
+    transition: 0.3s;
+    border: solid 1px #5d25a7;
+    background-color: #5d25a7;
+}
+.usuario{
+    transition: 0.2s;
+    background-color: rgb(160, 160, 160);
+    border: 2px solid rgb(197, 197, 197);
+    color: rgb(75, 75, 75);
+}
+.usuario:hover{
+    transition: 0.2s;
+    transform: scale(102%);
+    color: white;
+}
+.usuario>div>i{
+    font-size: 22.5px;
+}
+.usuario>div>i:nth-child(1):hover{
+    color: rgb(0, 160, 253);
+    cursor: pointer;
+}
+.usuario>div>i:nth-child(2):hover{
+    color: black;
+    cursor: pointer;
+}
+.usuario>div>i:nth-child(3):hover{
+    color: red;
+    cursor: pointer;
+}
+.container-users{
+    max-height: 60vh;
+    overflow: scroll;
+}

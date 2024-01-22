@@ -1,0 +1,8 @@
+header{
+    height: 110px;
+    background-color:#7E30E1;
+}
+header>h1{
+    color: white;
+    font-family: 'Architects Daughter', cursive;
+}

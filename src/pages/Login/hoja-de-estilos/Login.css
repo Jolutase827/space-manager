@@ -1,0 +1,55 @@
+main.login{
+    height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('https://i.pinimg.com/originals/e5/5c/90/e55c90ca4c2a18afa353c28ef27210b3.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+main.login>form{
+    min-height: 340px;
+    background-color: white;
+   
+}
+.error>div{
+    animation-name: pop;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+}
+@keyframes pop {
+    0%{
+        transform: scale(0);
+    }
+    90%{
+        transform: scale(110%);
+    }
+    100%{
+        transform: scale(100%);
+    }
+}
+input{
+    border: 1px;
+    border-color: rgb(160, 160, 160);
+    border-style: solid;
+    padding: 5px;
+    padding-top: 7px;
+    font-family: 'Bebas Neue', sans-serif;
+}
+.button-enter{
+    background-color: #49108B;
+    color: white;
+    border: 0 solid;
+    padding: 8px 20px 7px 20px;
+    transition: 0.4s;
+    font-family: 'Bebas Neue', sans-serif;
+}
+.button-enter:hover{
+    box-shadow: #9c51f3 0px 3px 10px 4px;
+    background-color: #6e17d1;
+    transition: 0.4s;
+}
+form>h1{
+font-family: 'Nova Square', sans-serif;
+}
