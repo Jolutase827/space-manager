@@ -6,7 +6,9 @@ import Login from './pages/Login/Login';
 import RootInterface from './pages/RootInterface/RootInterface';
 import CreateUser from './pages/CreateUser/CreateUser';
 import UsersAdministration from './pages/RootInterface/UsersAdministration/UsersAdministration';
+import { useState } from 'react';
 function App() {
+  const [user,setUser] =  useState();
   return (
     <div>
       <Router>

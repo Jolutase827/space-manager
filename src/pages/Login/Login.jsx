@@ -20,7 +20,7 @@ function Login() {
     setBD(false);
     setUser(false);
     fetch(
-      `https://localhost/Space Managment/servicioUsuarios/service.php?nombre=${dataInput.name}&pwd=${dataInput.pwd}`
+      `http://localhost/Space Managment/servicioUsuarios/service.php?nombre=${dataInput.name}&pwd=${dataInput.pwd}`
     )
       .then((response) => response.json())
       .then((data) => {

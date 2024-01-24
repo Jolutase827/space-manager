@@ -3,6 +3,11 @@ import './hoja-de-estilos/UsersAdministration.css'
 import { useNavigate } from 'react-router-dom';
 function UsersAdministration() {
     const [users,setUsers] = useState([]);
+    fetch('http://localhost/Space Managment/servicioUsuarios/service.php')
+    .then(response => response.json())
+    .then(data=>{
+        setUsers(data);
+    })
     const navigate = useNavigate();
     const goCreateUsers = ()=> navigate('/createUser');
     return (
@@ -24,7 +29,14 @@ function UsersAdministration() {
             </div>
             <div className="container-users mt-4 d-flex flex-column align-items-center" >
                 {
-                    
+                    users.map(user=>{
+                        <div className='usuario d-flex justify-content-between ps-3 pe-3'>
+                            <h2>{user.nombreUsuario}</h2>
+                            <div>
+
+                            </div>
+                        </div>
+                    })
                 }
             </div>
         <br/>

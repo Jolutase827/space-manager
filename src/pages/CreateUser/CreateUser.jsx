@@ -25,7 +25,7 @@ function CreateUser() {
             },
             body: JSON.stringify({"nombreUsuario": dataInput.username,"nombre":dataInput.name,"apellido":dataInput.lastname,"password":dataInput.pwd, "email": dataInput.email })
         };
-        fetch('https://localhost/Space Managment/servicioUsuarios/service.php',options)
+        fetch('http://localhost/Space Managment/servicioUsuarios/service.php',options)
         .then(response => response.json())
         .then(data=> {
             if(data!=null){
