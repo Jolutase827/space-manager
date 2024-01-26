@@ -12,10 +12,10 @@ function Nav() {
         setActive(3);
     }
     return (
-        <nav class="d-flex justify-content-around align-items-center">
-            <button className={active==1&& 'active'} onClick={active1}>Users</button>
-            <button className={active==2&& 'active'} onClick={active2}>Spaces</button>
-            <button className={active==3&& 'active'} onClick={active3}>Seasons</button>
+        <nav className="d-flex justify-content-around align-items-center">
+            <button className={active===1? 'active':''} onClick={active1}>Users</button>
+            <button className={active===2? 'active':''} onClick={active2}>Spaces</button>
+            <button className={active===3? 'active':''} onClick={active3}>Seasons</button>
         </nav>
     )
   

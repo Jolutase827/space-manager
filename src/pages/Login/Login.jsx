@@ -3,10 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import "./hoja-de-estilos/Login.css";
 import { useForm } from "react-hook-form";
 
-function Login() {
-  const params = useParams();
+function Login({login}) {
 
-  const { path } = params;
   const navigate = useNavigate();
 
   const {
@@ -26,9 +24,11 @@ function Login() {
       .then((data) => {
 
         if (data != null) {
+          login(data);
           if (data.admin) {
             navigate('/rootInterface');
           }
+          
         } else {
           setUser(true);
         }
