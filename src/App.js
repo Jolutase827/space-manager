@@ -5,11 +5,12 @@ import Header from './components/Header';
 import Login from './pages/Login/Login';
 import RootInterface from './pages/RootInterface/RootInterface';
 import CreateUser from './pages/CreateUser/CreateUser';
-import UsersAdministration from './pages/RootInterface/UsersAdministration/UsersAdministration';
+import UsersAdministration from './pages/RootInterface/pages/UsersAdministration/UsersAdministration';
 import { useState } from 'react';
 import EditUser from './pages/EditUser.jsx/EditUser';
-import { set } from 'react-hook-form';
 import ProtectedRoute from './components/ProtectedRoute';
+import SpaceAdministration from './pages/RootInterface/pages/SpaceAdministration/SpaceAdministration';
+import SeasonAdministration from './pages/RootInterface/pages/SeasonAdministration/SeasonAdministration';
 function App() {
   const [user,setUser] =  useState(null);
   const login = (user)=>{
@@ -34,6 +35,8 @@ function App() {
           }>
             <Route path='' element={<Navigate to="usuarios" />} />
             <Route path='usuarios' element={<UsersAdministration/>}/>
+            <Route path='aulas' element={<SpaceAdministration/>}/>
+            <Route path='seasons' element={<SeasonAdministration/>}/>
           </Route>
           <Route path='/createUser' element={
             <ProtectedRoute  

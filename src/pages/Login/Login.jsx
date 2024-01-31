@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import "./hoja-de-estilos/Login.css";
 import { useForm } from "react-hook-form";
 
@@ -18,12 +18,12 @@ function Login({login}) {
     setBD(false);
     setUser(false);
     fetch(
-      `http://localhost/Space Managment/servicioUsuarios/service.php?nombre=${dataInput.name}&pwd=${dataInput.pwd}`
+      `https://localhost/Space Managment/servicioUsuarios/service.php?nombre=${dataInput.name}&pwd=${dataInput.pwd}`
     )
       .then((response) => response.json())
       .then((data) => {
 
-        if (data != null) {
+        if (data !== null) {
           login(data);
           if (data.admin) {
             navigate('/rootInterface');
@@ -80,7 +80,7 @@ function Login({login}) {
               role="alert"
             >
               {" "}
-              {errors.name != undefined
+              {errors.name !== undefined
                 ? errors.name.message
                 : errors.pwd.message}
             </div>
@@ -104,7 +104,7 @@ function Login({login}) {
         </div>
         <p className="col-8 ms-4 mt-4 mb-5">
           If you don't have account or forget your <strong>password</strong>{" "}
-          please contact with the <a href="">adminstrator</a>
+          please contact with the <a  href="/login">adminstrator</a>
         </p>
       </form>
     </main>

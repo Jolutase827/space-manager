@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './hoja-de-estilos/CreateUser.css';
 import { useForm } from "react-hook-form";
 
@@ -24,10 +24,10 @@ function CreateUser() {
             },
             body: JSON.stringify({"nombreUsuario": dataInput.username,"nombre":dataInput.name,"apellido":dataInput.lastname,"password":dataInput.pwd, "email": dataInput.email })
         };
-        fetch('http://localhost/Space Managment/servicioUsuarios/service.php',options)
+        fetch('httpS://localhost/Space Managment/servicioUsuarios/service.php',options)
         .then(response => response.json())
         .then(data=> {
-            if(data!=null){
+            if(data!==null){
                 setUser({
                     email:dataInput.email,
                     pwd:dataInput.pwd,
@@ -81,13 +81,13 @@ function CreateUser() {
                             className=" d-flex align-items-center justify-content-center rounded   p-3 error-message"
                             role="alert"
                         >
-                            {errors.name != undefined
+                            {errors.name !== undefined
                             ? errors.name.message
-                            : errors.pwd != undefined
+                            : errors.pwd !== undefined
                             ? errors.pwd.message
-                            : errors.email != undefined
+                            : errors.email !== undefined
                             ? errors.email.message
-                            : errors.lastname != undefined
+                            : errors.lastname !== undefined
                             ? errors.lastname.message
                             : errors.username.message}  
                         </div>
