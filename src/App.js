@@ -11,6 +11,9 @@ import EditUser from './pages/EditUser.jsx/EditUser';
 import ProtectedRoute from './components/ProtectedRoute';
 import SpaceAdministration from './pages/RootInterface/pages/SpaceAdministration/SpaceAdministration';
 import SeasonAdministration from './pages/RootInterface/pages/SeasonAdministration/SeasonAdministration';
+import CreateSpace from './pages/CreateSpace/CreateSpace';
+import EditSpace from './pages/EditSpace/EditSpace';
+import Space from './pages/Space/Space';
 function App() {
   const [user,setUser] =  useState(null);
   const login = (user)=>{
@@ -22,7 +25,7 @@ function App() {
   return (
     <div>
       <Router>
-        <Header/>
+        <Header user={user} logout={logout}/>
         <Routes>
           <Route path='/' element={<Navigate to="/login" />} />
           <Route path='/login' element={<Login login={login}/>}/>
@@ -38,6 +41,13 @@ function App() {
             <Route path='aulas' element={<SpaceAdministration/>}/>
             <Route path='seasons' element={<SeasonAdministration/>}/>
           </Route>
+          <Route path='/space/:id' element={
+            <ProtectedRoute  
+              isAllowed={!!user}
+              redirectTo='/login' >
+                <Space user={user}/>
+            </ProtectedRoute>
+          }/>
           <Route path='/createUser' element={
             <ProtectedRoute  
               isAllowed={!!user && user.admin==="1"}
@@ -50,6 +60,20 @@ function App() {
             isAllowed={!!user && user.admin==="1"}
             redirectTo='/login' >
               <EditUser/>
+            </ProtectedRoute>
+          }/>
+          <Route path='/createSpace' element={
+            <ProtectedRoute  
+              isAllowed={!!user && user.admin==="1"}
+              redirectTo='/login' >
+                <CreateSpace/>
+            </ProtectedRoute>
+          }/>
+          <Route path='/editSpace/:id' element={
+            <ProtectedRoute  
+              isAllowed={!!user && user.admin==="1"}
+              redirectTo='/login' >
+                <EditSpace/>
             </ProtectedRoute>
           }/>
         </Routes>

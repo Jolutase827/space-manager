@@ -47,7 +47,7 @@ function Login({login}) {
         className="col-12 col-md-8 col-lg-5 rounded pt-3 d-flex flex-column"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className="mb-4 ms-4">Log in</h1>
+        <h1 className="mb-4 ms-4 text-[40px]">Log in</h1>
         <div className="d-flex flex-column align-items-center">
           <input
             type="text"
@@ -104,7 +104,7 @@ function Login({login}) {
         </div>
         <p className="col-8 ms-4 mt-4 mb-5">
           If you don't have account or forget your <strong>password</strong>{" "}
-          please contact with the <a  href="/login">adminstrator</a>
+          please contact with the <a  href="/login" className=" underline text-blue-500 hover:text-blue-400">adminstrator</a>
         </p>
       </form>
     </main>

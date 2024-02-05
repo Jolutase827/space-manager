@@ -35,7 +35,7 @@ function UsersAdministration() {
   return (
     <main className="user-administration">
       <div className="col-12 d-flex justify-content-between">
-        <h1 className="ms-3 mt-2 title col-3">Users</h1>
+        <h1 className="ms-3 mt-2 title col-3 text-[40px]">Users</h1>
         <div className="me-3 mt-2 d-flex justify-content-between col-5">
           <div className="d-flex align-items-center">
             <input type="radio" name="radio" />
