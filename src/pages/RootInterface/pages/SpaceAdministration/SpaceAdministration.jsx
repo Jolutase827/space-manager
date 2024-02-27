@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import SpaceShow from './components/SpaceShow';
-import { set } from 'react-hook-form';
+
 
 const SpaceAdministration = () => {
   const navigate = useNavigate();
   const [spaces,setSpaces] = useState([]);
   useEffect(()=>{
-    fetch('httpS://localhost/Space Managment/servicioAulas/service.php')
+    fetch('http://localhost/Space Managment/servicioAulas/service.php')
     .then(response=>response.json())
     .then(data=>{
       setSpaces(data);

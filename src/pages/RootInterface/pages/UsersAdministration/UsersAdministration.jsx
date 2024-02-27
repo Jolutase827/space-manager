@@ -7,7 +7,7 @@ function UsersAdministration() {
   const [users, setUsers] = useState([]);
   const getData = async () => {
     const res = await axios.get(
-      "https://localhost/Space Managment/servicioUsuarios/service.php"
+      "http://localhost/Space Managment/servicioUsuarios/service.php"
     );
     setUsers(res.data);
   };
@@ -19,7 +19,7 @@ function UsersAdministration() {
         },
         body: JSON.stringify({"nombreUsuario": nombreUsuario}),
     };
-    fetch('https://localhost/Space Managment/servicioUsuarios/service.php',options)
+    fetch('http://localhost/Space Managment/servicioUsuarios/service.php',options)
     .catch(error=>console.log(error))
     .finally(()=>{
         const nuevoUsers= users.filter((user)=>user.nombreUsuario!==nombreUsuario);

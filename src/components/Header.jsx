@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 function Header ({user,logout}) {
     const navigate = useNavigate();
-    const goToInterface = ()=>{ (user.admin==="1")?navigate('/rootInterface'):navigate('/')}
+    const goToInterface = ()=>{ ((!!user)&&(user.admin==="1")?navigate('/rootInterface'):navigate('/userInterface'))}
     return (
       <header className='d-flex align-items-center justify-between'>
         <h1 onClick={goToInterface} className="ms-5 d-flex text-[40px] cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" fill="currentColor" className="bi bi-cup-hot me-2" viewBox="0 0 16 16">

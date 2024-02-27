@@ -23,7 +23,7 @@ const EditSpace = () => {
             },
             body: JSON.stringify({"id":id,"nombre": dataInput.name,"tipo":dataInput.tipo})
         };
-        fetch('httpS://localhost/Space Managment/servicioAulas/service.php',options)
+        fetch('http://localhost/Space Managment/servicioAulas/service.php',options)
         .then(response => response.json())
         .then(data=> {
             if(data!==false){

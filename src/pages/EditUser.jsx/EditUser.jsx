@@ -30,7 +30,7 @@ const EditUser = () => {
             },
             body: JSON.stringify({"nombreUsuario": id,"nombre":dataInput.name,"apellido":dataInput.lastname,"password":dataInput.pwd, "email": dataInput.email })
         };
-        fetch('https://localhost/Space Managment/servicioUsuarios/service.php',options)
+        fetch('http://localhost/Space Managment/servicioUsuarios/service.php',options)
         .then(response => response.json())
         .then(data=> {
             console.log(data);
