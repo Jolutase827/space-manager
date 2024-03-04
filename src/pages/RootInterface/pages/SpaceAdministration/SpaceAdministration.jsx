@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SpaceShow from './components/SpaceShow';
 
 
-const SpaceAdministration = () => {
+const SpaceAdministration = ({season}) => {
   const navigate = useNavigate();
   const [spaces,setSpaces] = useState([]);
   useEffect(()=>{
@@ -53,7 +53,7 @@ const SpaceAdministration = () => {
       <div className="container-users mt-4 d-flex flex-wrap ps-4 pe-4">
         
         {spaces.map((space,index) => (
-          <SpaceShow key={index} space={space} deleteSpace={deleteSpace}/>
+          <SpaceShow key={index} season={season} space={space} deleteSpace={deleteSpace}/>
         ))}
       </div>
       </main>

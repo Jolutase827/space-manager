@@ -24,17 +24,17 @@ const CreateSeason = ({addSeason}) => {
       },
       body: JSON.stringify({"numero":hora.numero,"espacio":hora.espacio,"inicio":hora.inicio})
   };
-  fetch('http://localhost/Space Managment/servicioHoras/service.php',options)
+  fetch('https://localhost/Space Managment/servicioHoras/service.php',options)
   .catch(error=>console.error(error))
   .finally(()=>{
-    options= {
+    let option= {
       method: 'POST',
       headers:{
           'Content-Type': 'aplication/json',
       },
       body: JSON.stringify({"inicio":dataInput.curso_inicio,"fin":dataInput.curso_fin})
   };
-  fetch('http://localhost/Space Managment/servicioCursos/service.php',options)
+  fetch('http://localhost/Space Managment/servicioCursos/service.php',option)
   .catch(error=>console.error(error))
   .finally(()=>{
     addSeason({"inicio":dataInput.curso_inicio,"fin":dataInput.curso_fin});
@@ -60,12 +60,7 @@ const CreateSeason = ({addSeason}) => {
     setValue('hora_patio','');
   });
   };
-  const horaSiguiente = (horaDeIncio, duracion) => {
-    const hora = parseInt(horaDeIncio.substring(0, 2));
-    const horaASumar = parseInt(duracion.substring(0, 2));
-    const minuto = parseInt(horaDeIncio.substring(3, 5));
-    const minutosAsumar = parseInt(duracion.substring(3, 5));
-  };
+  
   const onSubmit = (dataInput, e) => {
     setHora({
       numero: dataInput.numero,

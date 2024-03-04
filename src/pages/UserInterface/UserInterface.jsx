@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import SpaceShowUser from './components/SpaceShowUser';
 
-const UserInterface = () => {
+const UserInterface = ({season}) => {
     const [spaces,setSpaces] = useState([]);
     useEffect(()=>{
       fetch('http://localhost/Space Managment/servicioAulas/service.php')
@@ -20,7 +20,7 @@ const UserInterface = () => {
         <div className="container-users mt-4 d-flex flex-wrap ps-4 pe-4">
           
           {spaces.map((space,index) => (
-            <SpaceShowUser key={index} space={space} />
+            <SpaceShowUser key={index} space={space} season={season}/>
           ))}
         </div>
         </main>

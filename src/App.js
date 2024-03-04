@@ -28,7 +28,7 @@ function App() {
   const [season,setSeason] = useState(null);
   useEffect(() => {
     
-    fetch('http://localhost/Space%20Management/servicioCursos/service.php')
+    fetch('http://localhost/Space Managment/servicioCursos/service.php')
       .then(response => response.json())
       .then(data => {
         if (data !== null) {
@@ -69,21 +69,24 @@ function App() {
           }>
             <Route path='' element={<Navigate to="usuarios" />} />
             <Route path='usuarios' element={<UsersAdministration/>}/>
-            <Route path='aulas' element={<SpaceAdministration/>}/>
+            <Route path='aulas' element={<SpaceAdministration season={season}/>}/>
             <Route path='seasons' element={<SeasonAdministration  season={season} closeSeason={closeSeason}/>}/>
           </Route>
           <Route path='/userInterface' element={
             <ProtectedRoute  
               isAllowed={!!user}
               redirectTo='/login' >
-                <UserInterface user={user}/>
+                <UserInterface 
+                  user={user}
+                  season={season}
+                />
             </ProtectedRoute>
           }/>
           <Route path='/space/:id' element={
             <ProtectedRoute  
               isAllowed={!!user}
               redirectTo='/login' >
-                <Space user={user}/>
+                <Space user={user} season={season}/>
             </ProtectedRoute>
           }/>
           <Route path='/createUser' element={
@@ -97,7 +100,9 @@ function App() {
             <ProtectedRoute  
               isAllowed={!!user && user.admin==="1"}
               redirectTo='/login' >
-                <AddHoliday/>
+                <AddHoliday
+                  season={season} 
+                />
             </ProtectedRoute>
           }/>
           <Route path='/createSeason' element={

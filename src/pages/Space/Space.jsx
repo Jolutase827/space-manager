@@ -3,32 +3,34 @@ import { useParams } from "react-router-dom";
 import SpaceBlock from "./components/SpaceBlock";
 import { useForm } from "react-hook-form";
 
-const Space = ({ user }) => {
+const Space = ({ user, season }) => {
   const { id } = useParams();
   const [space, setSpace] = useState({ id: id, nombre: null, tipo: null });
-  const [dialog,setDialog] = useState(false);
-  const [reserves,setReserves] = useState([]);
+  const [dialog, setDialog] = useState(false);
+  const [reserves, setReserves] = useState([]);
   const diaDeHoy = new Date();
   const weeksLimit = new Date(diaDeHoy);
-  weeksLimit.setDate(weeksLimit.getDate()+14);
+  const [horasMañanas, setHorasMañanas] = useState([]);
+  const [horasTardes, setHorasTardes] = useState([]);
+  const [festivos,setFestivos]=useState([]);
+  weeksLimit.setDate(weeksLimit.getDate() + 14);
   useEffect(() => {
-    fetch(
-      "http://localhost/Space Managment/servicioAulas/service.php?id=" + id
-    )
+    fetch("http://localhost/Space Managment/servicioAulas/service.php?id=" + id)
       .then((response) => response.json())
       .then((data) => {
         setSpace({ id: data.id, nombre: data.nombre, tipo: data.tipo });
       });
   }, [id]);
-  useEffect(()=>{
+  useEffect(() => {
     fetch(
-      "http://localhost/Space Managment/servicioReservas/service.php?aula_id=" + id
+      "http://localhost/Space Managment/servicioReservas/service.php?aula_id=" +
+        id
     )
       .then((response) => response.json())
       .then((data) => {
         setReserves(data);
       });
-  },[reserves,id])
+  }, [reserves, id]);
   const {
     register,
     setValue,
@@ -36,24 +38,167 @@ const Space = ({ user }) => {
     handleSubmit,
   } = useForm();
 
-  const onSubmit=(dataInput, e)=>{
+  useEffect(() => {
+    let hora;
+    let patios;
+    fetch("http://localhost/Space Managment/servicioHoras/service.php")
+      .then((response) => response.json())
+      .then((data) => {
+        hora = data;
+      })
+      .finally(() => {
+        fetch("http://localhost/Space Managment/servicioPatios/service.php")
+          .then((response) => response.json())
+          .then((data) => {
+            patios = data;
+          })
+          .finally(() => {
+            console.log(hora);
+            let horaAux = hora.inicio;
+            let horasMañanasAux = [];
+            let horasTardeAux = [];
+            for (let i = 1; i <= hora.numero; i++) {
+              if (horaTardeOMañana(horaAux)) {
+                horasMañanasAux.push(
+                  horaAux + "-" + horaSiguiente(horaAux, hora.espacio)
+                );
+                horasMañanas.push(
+                  horaAux + "-" + horaSiguiente(horaAux, hora.espacio)
+                );
+              } else {
+                horasTardeAux.push(
+                  horaAux + "-" + horaSiguiente(horaAux, hora.espacio)
+                );
+              }
+              horaAux = horaSiguiente(horaAux, hora.espacio);
+              if (
+                patios.filter((patio) => parseInt(patio.hora) === i)[0] !==
+                undefined
+              ) {
+                if (horaTardeOMañana(horaAux)) {
+                  horasMañanasAux.push(
+                    horaAux +
+                      "-" +
+                      patioSiguiente(
+                        horaAux,
+                        patios.filter((patio) => parseInt(patio.hora) === i)[0]
+                          .duracion
+                      )
+                  );
+                  horasMañanas.push(
+                    horaAux +
+                      "-" +
+                      patioSiguiente(
+                        horaAux,
+                        patios.filter((patio) => parseInt(patio.hora) === i)[0]
+                          .duracion
+                      )
+                  );
+                } else {
+                  horasTardeAux.push(
+                    horaAux +
+                      "-" +
+                      patioSiguiente(
+                        horaAux,
+                        patios.filter((patio) => parseInt(patio.hora) === i)[0]
+                          .duracion
+                      )
+                  );
+                }
+                horaAux = patioSiguiente(
+                  horaAux,
+                  patios.filter((patio) => parseInt(patio.hora) === i)[0]
+                    .duracion
+                );
+              }
+            }
+            setHorasMañanas(horasMañanasAux);
+            setHorasTardes(horasTardeAux);
+          });
+      });
+  }, []);
+
+
+  useEffect(()=>{
+    fetch('http://localhost/Space Managment/servicioFestivos/service.php')
+    .then(response=>response.json())
+    .then(data=>{
+      setFestivos(data);
+    })
+    .catch(error=>console.log(error));
+  },[]);
+
+
+  const horaTardeOMañana = (horaAux) => {
+    return parseInt(horaAux.substring(0, 2)) <= 12;
+  };
+
+  const horaSiguiente = (horaDeIncio, duracion) => {
+    const hora = parseInt(horaDeIncio.substring(0, 2));
+    const horaASumar = parseInt(duracion.substring(0, 2));
+    const minuto = parseInt(horaDeIncio.substring(3, 5));
+    const minutosAsumar = parseInt(duracion.substring(3, 5));
+    let minutoAux = minuto + minutosAsumar;
+    let horAux = 0;
+    if (minutoAux >= 60) {
+      horAux = 1;
+      minutoAux = minutoAux - 60;
+    }
+    horAux += hora + horaASumar;
+    return (
+      (horAux.toString().length < 2 ? "0" : "") +
+      horAux +
+      ":" +
+      (minutoAux.toString().length < 2 ? "0" : "") +
+      minutoAux
+    );
+  };
+  const patioSiguiente = (horaDeInicio, duracion) => {
+    const hora = parseInt(horaDeInicio.substring(0, 2));
+    const minuto = parseInt(horaDeInicio.substring(3, 5));
+    const minutosAsumar = parseInt(duracion);
+    let minutoAux = minuto + minutosAsumar;
+    let horAux = 0;
+    if (minutoAux >= 60) {
+      horAux = 1;
+      minutoAux = minutoAux - 60;
+    }
+    horAux += hora;
+    return (
+      (horAux.toString().length < 2 ? "0" : "") +
+      horAux +
+      ":" +
+      (minutoAux.toString().length < 2 ? "0" : "") +
+      minutoAux
+    );
+  };
+  const onSubmit = (dataInput, e) => {
     const maybeReserveAux = [];
     let auxId;
     let diaAux;
-    maybeReserve.forEach(reserve=>{
+    maybeReserve.forEach((reserve) => {
       for (let index = 0; index < dataInput.weeks; index++) {
         diaAux = new Date(reserve.dia.date);
-        diaAux.setDate(diaAux.getDate()+(index*7));
-        auxId =  diaAux.getFullYear()+ "-" + (diaAux.getMonth() + 1) + "-" + diaAux.getDate()+reserve.hora;
-        maybeReserveAux.push({id: auxId,aula_id: space.id, usuario_id: dataInput.name});
+        diaAux.setDate(diaAux.getDate() + index * 7);
+        auxId =
+          diaAux.getFullYear() +
+          "-" +
+          (diaAux.getMonth() + 1) +
+          "-" +
+          diaAux.getDate() +
+          reserve.hora;
+        maybeReserveAux.push({
+          id: auxId,
+          aula_id: space.id,
+          usuario_id: dataInput.name,
+        });
       }
     });
     doReserves(maybeReserveAux);
-    setValue('name','');
-    setValue('weeks',1);
+    setValue("name", "");
+    setValue("weeks", 1);
     setDialog(false);
-  }
-
+  };
 
   const doReserves = (maybeReserve) => {
     const options = {
@@ -61,65 +206,71 @@ const Space = ({ user }) => {
       headers: {
         "Content-Type": "aplication/json",
       },
-      body: JSON.stringify({reservas:maybeReserve}),
+      body: JSON.stringify({ reservas: maybeReserve }),
     };
     fetch(
       "http://localhost/Space Managment/servicioReservas/service.php",
       options
     )
       .then((response) => response.json())
-      .then(data=>{
+      .then((data) => {
         setMaybeReserve([]);
       })
       .catch((error) => {
         console.error(error);
       });
   };
-  const removeById =(id)=>{
+  const removeById = (id) => {
     const options = {
       method: "DELETE",
       headers: {
         "Content-Type": "aplication/json",
       },
-      body: JSON.stringify({id:id}),
+      body: JSON.stringify({ id: id }),
     };
     fetch(
       "http://localhost/Space Managment/servicioReservas/service.php",
       options
     )
       .then((response) => response.json())
-      .then(data=>{
-        alert('Se ha eliminado reserva');
+      .then((data) => {
+        alert("Se ha eliminado reserva");
       })
       .catch((error) => {
         console.error(error);
       });
   };
-  const removeByGroup =(grupo_id)=>{
+  const removeByGroup = (grupo_id) => {
     const options = {
       method: "DELETE",
       headers: {
         "Content-Type": "aplication/json",
       },
-      body: JSON.stringify({grupo_id:grupo_id}),
+      body: JSON.stringify({ grupo_id: grupo_id }),
     };
     fetch(
       "http://localhost/Space Managment/servicioReservas/service.php",
       options
     )
       .then((response) => response.json())
-      .then(data=>{
-        alert('Se han eliminado las reservas');
+      .then((data) => {
+        alert("Se han eliminado las reservas");
       })
       .catch((error) => {
         console.error(error);
       });
   };
   const [maybeReserve, setMaybeReserve] = useState([]);
-  const addMaybeReserve = (id,dia,hora) => {
+  const addMaybeReserve = (id, dia, hora) => {
     const maybeReserveAux = [
       ...maybeReserve,
-      { id: id, aula_id: space.id, usuario_id: user.nombreUsuario,dia:dia,hora:hora },
+      {
+        id: id,
+        aula_id: space.id,
+        usuario_id: user.nombreUsuario,
+        dia: dia,
+        hora: hora,
+      },
     ];
     setMaybeReserve(maybeReserveAux);
   };
@@ -151,48 +302,50 @@ const Space = ({ user }) => {
   ];
   const [dias, setDias] = useState([]);
   const masUnaSemana = () => {
-    if(user.admin==='1'){
+    if (user.admin === "1") {
       const dateAux = dateCalendar;
       dateAux.setDate(dateCalendar.getDate() + 7);
       setDateCalendar(dateAux);
       cambiarCalendario();
-    }else{
+    } else {
       const dateAux = dateCalendar;
       dateAux.setDate(dateCalendar.getDate() + 7);
       console.log(dateAux);
       console.log(weeksLimit);
-      if(dateAux<=weeksLimit){
+      if (dateAux <= weeksLimit) {
         setDateCalendar(dateAux);
         cambiarCalendario();
-      }else{
+      } else {
         dateAux.setDate(dateCalendar.getDate() - 7);
       }
     }
-    
   };
   const menosUnaSemana = () => {
-    if(user.admin==='1'){
+    if (user.admin === "1") {
       const dateAux = dateCalendar;
       dateAux.setDate(dateCalendar.getDate() - 7);
       setDateCalendar(dateAux);
       cambiarCalendario();
-    }else{
+    } else {
       const dateAux = dateCalendar;
       dateAux.setDate(dateCalendar.getDate() - 7);
       console.log(dateAux);
       console.log(diaDeHoy);
-      if(dateAux.getDate()>=diaDeHoy.getDate() && dateAux.getMonth()>=diaDeHoy.getMonth()&&dateAux.getFullYear()>=diaDeHoy.getFullYear()){
+      if (
+        dateAux.getDate() >= diaDeHoy.getDate() &&
+        dateAux.getMonth() >= diaDeHoy.getMonth() &&
+        dateAux.getFullYear() >= diaDeHoy.getFullYear()
+      ) {
         setDateCalendar(dateAux);
         cambiarCalendario();
-      }else{
+      } else {
         dateAux.setDate(dateAux.getDate() + 7);
       }
     }
-    
   };
   const cambiarCalendario = () => {
     const diasActuales = [];
-    const dateCambio =  new Date(dateCalendar);
+    const dateCambio = new Date(dateCalendar);
     for (
       let j = 1;
       j <= (dateCalendar.getDay() === 0 ? 7 : dateCalendar.getDay()) && j <= 5;
@@ -205,12 +358,11 @@ const Space = ({ user }) => {
       );
       diasActuales[j - 1] = {
         date:
-          dateCambio.getFullYear()
-          +
+          dateCambio.getFullYear() +
           "-" +
           (dateCambio.getMonth() + 1) +
           "-" +
-          dateCambio.getDate() ,
+          dateCambio.getDate(),
         string:
           textoEntresemana[dateCambio.getDay() - 1] +
           " " +
@@ -229,12 +381,11 @@ const Space = ({ user }) => {
       );
       diasActuales[i] = {
         date:
-          
-        dateCambio.getFullYear()+
-        "-" +
-        (dateCambio.getMonth() + 1) +
-        "-" +
-        dateCambio.getDate(),
+          dateCambio.getFullYear() +
+          "-" +
+          (dateCambio.getMonth() + 1) +
+          "-" +
+          dateCambio.getDate(),
         string:
           textoEntresemana[dateCambio.getDay() - 1] +
           " " +
@@ -244,79 +395,98 @@ const Space = ({ user }) => {
     setDias(diasActuales);
   };
   useEffect(cambiarCalendario, []);
-  const horasMañanas = ["8:15-9:10",
-    "9:10-10:05",
-    "10:05-11:00",
-    "11:00-11:30",
-    "11:30-12:25",
-    "12:25-13:20",
-    "13:20-14:15",
-    "14:15-14:35"
-];
-  const horasTardes = [
-    "14:35-15:30",
-    "15:30-16:25",
-    "16:25-17:20",
-    "17:20-17:40",
-    "17:40-18:35",
-    "18:35-19:30",
-    "19:30-20:25",
-    "20:25-21:20"
-  ];
-  const [horas,setHoras] = useState(horasMañanas);
-  const [isMañana,setisMañana]= useState(true);
-  const cambiarHoras = ()=>{
-    if(isMañana){
+
+  const [horas, setHoras] = useState(horasMañanas);
+  const [isMañana, setisMañana] = useState(true);
+  const cambiarHoras = () => {
+    if (isMañana) {
       setHoras(horasTardes);
-    }else{
+    } else {
       setHoras(horasMañanas);
     }
     setisMañana(!isMañana);
-  }
+  };
 
   return (
     <main className="user-administration">
-      {
-        dialog&&
-      <div className=" fixed top-0 w-[100%] h-[100vh] bg-gray-500/[.6] flex justify-center items-center">
-        <div className="bg-white w-[30%] h-[50%] flex flex-col">
-          <div className="flex justify-end w-[100%]">
-            <i className="bi bi-x-lg me-3 mt-1 text-[30px] hover:text-black text-gray-700 cursor-pointer" onClick={(e)=>setDialog(false)}></i>
+      {dialog && (
+        <div className=" fixed top-0 w-[100%] h-[100vh] bg-gray-500/[.6] flex justify-center items-center">
+          <div className="bg-white w-[30%] h-[50%] flex flex-col">
+            <div className="flex justify-end w-[100%]">
+              <i
+                className="bi bi-x-lg me-3 mt-1 text-[30px] hover:text-black text-gray-700 cursor-pointer"
+                onClick={(e) => setDialog(false)}
+              ></i>
+            </div>
+            <h1 className="text-[30px] fw-semibold ms-4">Reserve: </h1>
+            <form
+              className="flex justify-center items-center flex-col"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="mt-2">Write the name of the user</div>
+              <input
+                type="text"
+                placeholder="User name*"
+                className="rounded col-8 create-user "
+                name="input-user-name"
+                {...register("name", { required: "Please, complete the name" })}
+                aria-invalid={errors.name ? "true" : "false"}
+              />
+              <div className="text-red-600 mt-1">
+                {errors.name && errors.name.message}
+              </div>
+              <div className="mt-4 col-6 text-center">
+                How many weeks do you want to reserve this pattern
+              </div>
+              <input
+                type="number"
+                min={1}
+                placeholder="Weeks*"
+                className="rounded col-8 create-user "
+                name="input-user-name"
+                {...register("weeks", {
+                  required: "Please, complete the number of weeks ",
+                })}
+                aria-invalid={errors.weeks ? "true" : "false"}
+              />
+              <div className="text-red-600 mt-1">
+                {errors.weeks && errors.weeks.message}
+              </div>
+              <button className="rounded-md bg-fuchsia-500 mt-3 text-white hover:bg-fuchsia-600 hover:shadow-fuchsia-600 p-2 col-3">
+                Reserve
+              </button>
+            </form>
           </div>
-          <h1 className="text-[30px] fw-semibold ms-4">Reserve: </h1>
-          <form className='flex justify-center items-center flex-col' onSubmit={handleSubmit(onSubmit)}>
-            <div className="mt-2">Write the name of the user</div>
-            <input type="text" placeholder="User name*" className='rounded col-8 create-user ' name='input-user-name'{...register("name", {required: "Please, complete the name",})} aria-invalid={errors.name ? "true" : "false"}/>
-            <div className="text-red-600 mt-1">{(errors.name&& errors.name.message)}</div>
-            <div className="mt-4 col-6 text-center">How many weeks do you want to reserve this pattern</div>
-            <input type="number" min={1} placeholder="Weeks*" className='rounded col-8 create-user ' name='input-user-name'{...register("weeks", {required: "Please, complete the number of weeks ",})} aria-invalid={errors.weeks ? "true" : "false"}/>
-            <div className="text-red-600 mt-1">{(errors.weeks&& errors.weeks.message)}</div>
-            <button className="rounded-md bg-fuchsia-500 mt-3 text-white hover:bg-fuchsia-600 hover:shadow-fuchsia-600 p-2 col-3">Reserve</button>
-          </form>
         </div>
-      </div>
-  }
+      )}
       <div className="col-12 d-flex justify-content-between mb-4">
         <h1 className="ms-3 mt-2 title col-3 text-[40px]">
           Space {space.nombre}
         </h1>
       </div>
       <div className="h-[100px] flex items-center">
-          <button className="w-[7.5%] bg-purple-500 rounded-md h-[40px] text-white hover:bg-purple-600 hover:transition transition ms-[3%]" onClick={cambiarHoras}>{(isMañana)?'Mañanas':'Tardes'}</button>
-        {maybeReserve.length > 0 && (<>
-          <button
-            onClick={(e)=>doReserves(maybeReserve)}
-            className="w-[10%] ms-[2%] h-[50px] rounded-lg bg-pink-500 hover:transition transition hover:shadow-lg-pink-700 hover:bg-pink-700  text-white"
-          >
-            Reserve
-          </button>
-          {user.nombreUsuario==='root'&&(
-          <button
-            onClick={(e)=>setDialog(true)}
-            className="w-[10%] ms-[1%] h-[50px] rounded-lg bg-pink-400 hover:transition transition hover:shadow-lg-pink-700 hover:bg-pink-600  text-white"
-          >
-            Reserve for
-          </button>)}
+        <button
+          className="w-[7.5%] bg-purple-500 rounded-md h-[40px] text-white hover:bg-purple-600 hover:transition transition ms-[3%]"
+          onClick={cambiarHoras}
+        >
+          {isMañana ? "Mañanas" : "Tardes"}
+        </button>
+        {maybeReserve.length > 0 && (
+          <>
+            <button
+              onClick={(e) => doReserves(maybeReserve)}
+              className="w-[10%] ms-[2%] h-[50px] rounded-lg bg-pink-500 hover:transition transition hover:shadow-lg-pink-700 hover:bg-pink-700  text-white"
+            >
+              Reserve
+            </button>
+            {user.nombreUsuario === "root" && (
+              <button
+                onClick={(e) => setDialog(true)}
+                className="w-[10%] ms-[1%] h-[50px] rounded-lg bg-pink-400 hover:transition transition hover:shadow-lg-pink-700 hover:bg-pink-600  text-white"
+              >
+                Reserve for
+              </button>
+            )}
           </>
         )}
       </div>
@@ -365,6 +535,7 @@ const Space = ({ user }) => {
                   addMaybeReserve={addMaybeReserve}
                   removeById={removeById}
                   removeByGroup={removeByGroup}
+                  festivos={festivos}
                   key={index + hindex}
                 />
               ))}
