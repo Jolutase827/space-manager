@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SpaceBlock = ({dia,hora,festivos,diaDeHoy,weeksLimit,reserves,user,maybeReserve,removeMaybeReserve,addMaybeReserve,removeById,removeByGroup}) => {
+const SpaceBlock = ({dia,hora,festivos,diaDeHoy,weeksLimit,reserves,user,maybeReserve,removeMaybeReserve,addMaybeReserve,removeById,removeByGroup,seasonini,seasonfin}) => {
   let id = dia.date+hora;
   const diaDelEspacio = new Date(dia.date); 
   let selected= (maybeReserve.find(reserve=>reserve.id===id)===undefined);
@@ -11,9 +11,15 @@ const SpaceBlock = ({dia,hora,festivos,diaDeHoy,weeksLimit,reserves,user,maybeRe
   }
   
   if(diaDelEspacio>diaDeHoy){
-    if(festivos.find(festivo=>festivo.dia===dia.date)!==undefined){
+    if(seasonfin<diaDelEspacio||seasonini>diaDelEspacio){
       return (
         <div className={'w-[16.6%] fw-semibold flex-col h-[6.25vh] border-b-[1px] text-white border-black border-e-[1px] flex justify-center items-center hover:scale-105 hover:border-[1px] hover:shadow-md bg-slate-500'}>
+            Out of season
+        </div>
+      )
+    }else if(festivos.find(festivo=>festivo.dia===dia.date)!==undefined){
+      return (
+        <div className={'w-[16.6%] fw-semibold flex-col h-[6.25vh] border-b-[1px] text-white border-black border-e-[1px] flex justify-center items-center hover:scale-105 hover:border-[1px] hover:shadow-md bg-red-500'}>
             Holiday
         </div>
       )

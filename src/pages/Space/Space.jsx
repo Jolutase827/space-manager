@@ -537,6 +537,8 @@ const Space = ({ user, season }) => {
                   removeByGroup={removeByGroup}
                   festivos={festivos}
                   key={index + hindex}
+                  seasonini={new Date(season.inicio)}
+                  seasonfin={new Date(season.fin)}
                 />
               ))}
             </>
